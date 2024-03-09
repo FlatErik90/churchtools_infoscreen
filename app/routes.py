@@ -18,8 +18,8 @@ public_calendar_ids = [
 
 def get_calendar_entries(next_n_days):
     # enable to see all calendar ids
-    for c in ct_client.calendars.list():
-        print(c.name, c.id, c.color)
+    # for c in ct_client.calendars.list():
+    #     print(c.name, c.id, c.color)
     entries = ct_client.calendars.appointments(public_calendar_ids,
                                                datetime.datetime.now(),
                                                datetime.datetime.now() + datetime.timedelta(days=next_n_days))
@@ -42,5 +42,5 @@ def get_calendar_colors():
 def index():
     calendar_entries = get_calendar_entries(next_n_days=28)
     calendar_colors = get_calendar_colors()
-    print(calendar_entries)
+    # print(calendar_entries)
     return render_template('index.html', entries=calendar_entries, colors=calendar_colors)
