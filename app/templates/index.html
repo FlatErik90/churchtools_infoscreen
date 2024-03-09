@@ -1,16 +1,54 @@
 <!doctype html>
 <html>
     <head>
-        {% if title %}
-        <title>{{ title }} - Microblog</title>
-        {% else %}
-        <title>Welcome to Microblog</title>
-        {% endif %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Termine</title>
+        <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous">
+        <style>
+            {% for color in colors %}
+                .bg-color-{{ color[0] }} {
+                 background-color: {{color[1]}} !important;
+                }
+            {% endfor %}
+    </style>
     </head>
     <body>
-        <h1>Aktuelle Kalendereinträge</h1>
-        {% for entry in entries %}
-        <div><p>{{ entry.caption }} at: <b>{{ entry.startDate }}</b> in: {{ entry.calendar.name }}</p></div>
+        <div class="container-fluid text-sm-center p-5 bg-light"><h1 class="display-4">Aktuelle Termine</h1></div>
+        <div class="container-fluid">
+        <table class="table">
+            {% for entry in entries %}
+            <tr>
+                <td style="width: 2%" class="bg-color-{{entry.calendar.id}}"></td>
+                <td>
+                    <h5><b>
+                        {{ moment(entry.startDate).format('dd, DD.MM.YY') }}
+                    </b></h5>
+                    {% if not entry.allDay %}
+                    {{ moment(entry.startDate).format('HH:mm') }} Uhr -  {{ moment(entry.endDate).format('HH:mm') }} Uhr
+                    {% else %}
+                    ganztägig
+                    {% endif %}
+                </td>
+                <td><h3>{{ entry.caption }}</h3>
+                    {% if entry.note is not none %}
+                    {{ entry.note }}
+                    {% endif %}
+                </td>
+                <!--td>{{ entry.calendar.name }}</td-->
+            </tr>
         {% endfor %}
+        </table>
+        </div>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous">
+        </script>
+        {{ moment.include_moment() }}
     </body>
 </html>

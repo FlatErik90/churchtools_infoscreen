@@ -3,9 +3,7 @@ from app import app
 from app import ct_client
 import datetime
 
-
-def get_calender_entries(next_n_days=21):
-    public_calender_ids = [
+public_calendar_ids = [
         80,  # Sonntagsschule
         89,  # Jugend
         77,  # Chor
@@ -16,13 +14,15 @@ def get_calender_entries(next_n_days=21):
         74,  # Instrumental
         #37,  # Bezirkstermine
     ]
-    # enable to see all calender ids
-    # for c in ct_client.calendars.list():
-    #     print(c.name, c.id)
-    entries = ct_client.calendars.appointments([c.id for c in ct_client.calendars.list()
-                                                if c.id in public_calender_ids],
-                                                 datetime.datetime.now(),
-                                                 datetime.datetime.now() + datetime.timedelta(days=next_n_days))
+
+
+def get_calendar_entries(next_n_days=21):
+    # enable to see all calendar ids
+    for c in ct_client.calendars.list():
+        print(c.name, c.id, c.color)
+    entries = ct_client.calendars.appointments(public_calendar_ids,
+                                               datetime.datetime.now(),
+                                               datetime.datetime.now() + datetime.timedelta(days=next_n_days))
     # filter out entries with duplicate names and entries with the name Gottesdienst
     seen_entries = []
     filtered_entries = []
@@ -33,9 +33,14 @@ def get_calender_entries(next_n_days=21):
     return filtered_entries
 
 
+def get_calendar_colors():
+    return [(c.id, c.color) for c in ct_client.calendars.list() if c.id in public_calendar_ids]
+
+
 @app.route('/')
 @app.route('/index')
 def index():
-    calender_entries = get_calender_entries()
-    print(calender_entries)
-    return render_template('index.html', title='Home', entries=calender_entries)
+    calendar_entries = get_calendar_entries()
+    calendar_colors = get_calendar_colors()
+    print(calendar_entries)
+    return render_template('index.html', entries=calendar_entries, colors=calendar_colors)
