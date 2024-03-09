@@ -25,19 +25,23 @@
             <tr>
                 <td style="width: 2%" class="bg-color-{{entry.calendar.id}}"></td>
                 <td>
-                    <h5><b>
+                    <h4><b>
                         {{ moment(entry.startDate).format('dd, DD.MM.YY') }}
-                    </b></h5>
+                    </b></h4>
+                    <h5>
                     {% if not entry.allDay %}
                     {{ moment(entry.startDate).format('HH:mm') }} Uhr -  {{ moment(entry.endDate).format('HH:mm') }} Uhr
                     {% else %}
                     ganztägig
                     {% endif %}
+                    </h5>
                 </td>
-                <td><h3>{{ entry.caption }}</h3>
+                <td><h2>{{ entry.caption }}</h2>
+                    <h5>
                     {% if entry.note is not none %}
                     {{ entry.note }}
                     {% endif %}
+                    </h5>
                 </td>
                 <!--td>{{ entry.calendar.name }}</td-->
             </tr>
