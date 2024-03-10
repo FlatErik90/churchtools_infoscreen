@@ -23,33 +23,42 @@
             <h3>{{moment().format('dddd, DD.MM.YY')}} Uhr</h3>
         </div>
         <div class="container-fluid">
-        <table class="table">
-            {% for entry in entries %}
-            <tr>
-                <td style="width: 2%" class="bg-color-{{entry.calendar.id}}"></td>
-                <td>
-                    <h4><b>
-                        {{ moment(entry.startDate).format('dd, DD.MM.YY') }}
-                    </b></h4>
-                    <h5>
-                    {% if not entry.allDay %}
-                    {{ moment(entry.startDate).format('HH:mm') }} Uhr -  {{ moment(entry.endDate).format('HH:mm') }} Uhr
-                    {% else %}
-                    ganztägig
-                    {% endif %}
-                    </h5>
-                </td>
-                <td><h2>{{ entry.caption }}</h2>
-                    <h5>
-                    {% if entry.note is not none %}
-                    {{ entry.note }}
-                    {% endif %}
-                    </h5>
-                </td>
-                <!--td>{{ entry.calendar.name }}</td-->
-            </tr>
-        {% endfor %}
-        </table>
+            <div class="row ">
+            <div class="col-5 gallery">
+                {% for image in images %}
+                <img src="static/gallery_images/{{ image }}" class="img-fluid img-thumbnail" style="display: none;">
+                {% endfor %}
+            </div>
+            <div class="col-7">
+            <table class="table">
+                {% for entry in entries %}
+                <tr>
+                    <td style="width: 2%" class="bg-color-{{entry.calendar.id}}"></td>
+                    <td>
+                        <h4><b>
+                            {{ moment(entry.startDate).format('dd, DD.MM.YY') }}
+                        </b></h4>
+                        <h5>
+                        {% if not entry.allDay %}
+                        {{ moment(entry.startDate).format('HH:mm') }} Uhr -  {{ moment(entry.endDate).format('HH:mm') }} Uhr
+                        {% else %}
+                        ganztägig
+                        {% endif %}
+                        </h5>
+                    </td>
+                    <td><h2>{{ entry.caption }}</h2>
+                        <h5>
+                        {% if entry.note is not none %}
+                        {{ entry.note }}
+                        {% endif %}
+                        </h5>
+                    </td>
+                    <!--td>{{ entry.calendar.name }}</td-->
+                </tr>
+            {% endfor %}
+            </table>
+            </div>
+            </div>
         </div>
         <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -57,5 +66,35 @@
             crossorigin="anonymous">
         </script>
         {{ moment.include_moment() }}
+        {{ moment.locale("de") }}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+        $(document).ready(function() {
+          let currentIndex = 0;
+          const images = $('.gallery img');
+          const imageCount = images.length;
+
+          // Ensure there's at least one image.
+          if (imageCount === 0) {
+            console.error("No images found in the gallery.");
+            return;
+          }
+
+          // Show the first image explicitly, in case it's not marked as active.
+          images.eq(currentIndex).show();
+
+          function cycleImages() {
+            // Hide current image
+            images.eq(currentIndex).hide();
+            // Move to the next image, wrapping around if at the end
+            currentIndex = (currentIndex + 1) % imageCount;
+            // Show the next image
+            images.eq(currentIndex).show();
+          }
+
+          // Change image every X seconds
+          setInterval(cycleImages, {{ interval }});
+        });
+        </script>
     </body>
 </html>

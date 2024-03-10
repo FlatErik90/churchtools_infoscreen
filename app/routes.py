@@ -1,7 +1,10 @@
+import os
+
 from flask import render_template
 from app import app
 from app import ct_client
 import datetime
+
 
 public_calendar_ids = [
         80,  # Sonntagsschule
@@ -37,10 +40,22 @@ def get_calendar_colors():
     return [(c.id, c.color) for c in ct_client.calendars.list() if c.id in public_calendar_ids]
 
 
+def get_image_paths():
+    return os.listdir("app/static/gallery_images")
+
+
 @app.route('/')
 @app.route('/index')
 def index():
-    calendar_entries = get_calendar_entries(next_n_days=28)
+    calendar_entries = get_calendar_entries(28)
     calendar_colors = get_calendar_colors()
+    image_paths = get_image_paths()
+    gallery_interval = 5000  # milliseconds = 1/1000 seconds
     # print(calendar_entries)
-    return render_template('index.html', entries=calendar_entries, colors=calendar_colors)
+    # print(calendar_colors)
+    # print(image_paths)
+    return render_template('index.html',
+                           entries=calendar_entries,
+                           colors=calendar_colors,
+                           images=image_paths,
+                           interval=gallery_interval)

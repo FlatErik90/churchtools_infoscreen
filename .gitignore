@@ -1,2 +1,4 @@
 .idea
 venv
+.flaskenv
+app/static/gallery_images
