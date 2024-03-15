@@ -51,11 +51,16 @@ def index():
     calendar_colors = get_calendar_colors()
     image_paths = get_image_paths()
     gallery_interval = 5000  # milliseconds = 1/1000 seconds
+    gallery_mode = True
+    max_image_height = 700  # pixels
+    max_entries = 9
     # print(calendar_entries)
     # print(calendar_colors)
     # print(image_paths)
     return render_template('index.html',
-                           entries=calendar_entries,
+                           entries=calendar_entries[:max_entries],
                            colors=calendar_colors,
+                           gallery=gallery_mode,
                            images=image_paths,
+                           max_image_height=max_image_height,
                            interval=gallery_interval)
