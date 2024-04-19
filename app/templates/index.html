@@ -9,6 +9,11 @@
         rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
         crossorigin="anonymous">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
         <style>
             {% for color in colors %}
                 .bg-color-{{ color[0] }} {
@@ -34,7 +39,7 @@
             {% if gallery %}
             <div class="col-5 gallery">
                 {% for image in images %}
-                <img src="static/gallery_images/{{ image }}" class="img-fluid img-thumbnail" style="max-height:{{ max_image_height }}px; display: none;">
+                <img src="static/gallery_images/{{ image }}" class="img-fluid" style="max-height:{{ max_image_height }}px; box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); display: none;">
                 {% endfor %}
             </div>
             <div class="col-7">
