@@ -30,9 +30,21 @@ def get_calendar_entries(next_n_days):
     seen_entries = []
     filtered_entries = []
     for e in entries:
-        if (e.caption, e.startDate) not in seen_entries and e.caption != "Gottesdienst":
+        if (e.caption, e.startDate) not in seen_entries and e.caption != "Gottesdienst" or e.note is not None:
             filtered_entries.append(e)
             seen_entries.append((e.caption, e.startDate))
+    for entry in filtered_entries:
+        if entry.calendar.id == 27:
+            entry.calendar.name = ""
+        elif entry.calendar.id == 30:
+            entry.calendar.name = ""
+        elif entry.calendar.id == 86:
+            entry.calendar.name = "Konfirmanden"
+        elif entry.calendar.id == 83:
+            entry.calendar.name = "Reli"
+        elif entry.calendar.id == 74:
+            entry.calendar.name = "Instrumental"
+
     return filtered_entries
 
 
