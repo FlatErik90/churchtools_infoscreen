@@ -48,6 +48,15 @@ def get_calendar_entries(next_n_days):
     return filtered_entries
 
 
+def get_calendar_entries_mask(calendar_entries):
+    mask = [True]
+    current_date = calendar_entries[0].startDate
+    for entry in calendar_entries[1:]:
+        mask.append(entry.startDate.date() != current_date.date())
+        current_date = entry.startDate
+    return mask
+
+
 def get_calendar_colors():
     return [(c.id, c.color) for c in ct_client.calendars.list() if c.id in public_calendar_ids]
 
@@ -60,6 +69,7 @@ def get_image_paths():
 @app.route('/index')
 def index():
     calendar_entries = get_calendar_entries(28)
+    calender_entries_mask = get_calendar_entries_mask(calendar_entries)
     calendar_colors = get_calendar_colors()
     image_paths = get_image_paths()
     gallery_interval = 5000  # milliseconds = 1/1000 seconds
@@ -73,10 +83,13 @@ def index():
     #     print(real_page.text)
     #     print(page.text, page.wikiCategory.name)
     # print(calendar_entries)
+    # print(calender_entries_mask)
     # print(calendar_colors)
     # print(image_paths)
     return render_template('index.html',
                            entries=calendar_entries[:max_entries],
+                           date_mask=calender_entries_mask[:max_entries],
+                           separator_mask=calender_entries_mask[1:max_entries] + [True],
                            colors=calendar_colors,
                            gallery=gallery_mode,
                            images=image_paths,

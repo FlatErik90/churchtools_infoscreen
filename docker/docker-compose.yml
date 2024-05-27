@@ -7,3 +7,4 @@ services:
       - ../:/home/churchtools_infoscreen
     container_name: infoscreen
     command: flask run --debug
+    restart: always

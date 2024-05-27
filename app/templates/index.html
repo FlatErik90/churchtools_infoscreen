@@ -28,6 +28,11 @@
           color: white !important;
         }
         </style>
+        <style>
+            tr.noBorder td {
+             border: 0;
+            }
+        </style>
     </head>
     <body>
         <div class="container-fluid text-sm-center p-5 bg-light">
@@ -48,17 +53,25 @@
             {% endif %}
             <table class="table" style="border-collapse: separate; border-spacing: 0 1em;">
                 {% for entry in entries %}
+                {% if separator_mask[loop.index0] %}
                 <tr>
+                {% else %}
+                <tr class="noBorder">
+                {% endif %}
                     <!--td style="width: 2%; writing-mode: vertical-rl; text-orientation: upright" class="bg-color-{{entry.calendar.id}}"><b>{{ entry.calendar.name[:3]|upper }}</b></td-->
                     <!--td style="width: 2%" class="bg-color-{{entry.calendar.id}}"></td-->
                     <td>
                         <h4>
+                            {% if date_mask[loop.index0] %}
                             {{ moment(entry.startDate).format('dddd') }}
+                            {% endif %}
                         </h4>
                     </td>
                     <td>
                         <h4>
+                            {% if date_mask[loop.index0] %}
                             {{ moment(entry.startDate).format('DD. MMMM') }}
+                            {% endif %}
                         </h4>
                     </td>
                     <td>
