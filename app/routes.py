@@ -75,7 +75,7 @@ def index():
     gallery_interval = 5000  # milliseconds = 1/1000 seconds
     gallery_mode = True
     max_image_height = 700  # pixels
-    max_entries = 6
+    max_entries = 13
     # print(ct_client.wiki.categories())
     # pages = ct_client.wiki.pages(31)
     # for page in pages:

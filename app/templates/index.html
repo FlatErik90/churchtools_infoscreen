@@ -35,14 +35,14 @@
         </style>
     </head>
     <body>
-        <div class="container-fluid text-sm-center p-5 bg-light">
+        <!--div class="container-fluid text-sm-center p-5 bg-light">
             <h1 class="display-4">Aktuelle Termine</h1>
             <h3>{{moment().format('dddd, DD.MM.YY')}}</h3>
-        </div>
+        </div-->
         <div class="container-fluid">
-            <div class="row ">
+            <div class="row">
             {% if gallery %}
-            <div class="col-5 gallery">
+            <div class="col-5 gallery justify-content-center align-self-center">
                 {% for image in images %}
                 <img src="static/gallery_images/{{ image }}" class="img-fluid" style="max-height:{{ max_image_height }}px; box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); display: none;">
                 {% endfor %}
