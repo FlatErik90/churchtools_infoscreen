@@ -79,7 +79,7 @@ def index():
     gallery_interval = 5000  # milliseconds = 1/1000 seconds
     gallery_mode = True
     max_image_height = 700  # pixels
-    max_entries = 13
+    max_entries = 15
     # print(ct_client.wiki.categories())
     # pages = ct_client.wiki.pages(31)
     # for page in pages:
@@ -93,7 +93,26 @@ def index():
     return render_template('index.html',
                            entries=calendar_entries[:max_entries],
                            date_mask=calender_entries_mask[:max_entries],
-                           separator_mask=calender_entries_mask[1:max_entries] + [True],
+                           colors=calendar_colors,
+                           gallery=gallery_mode,
+                           images=image_paths,
+                           max_image_height=max_image_height,
+                           interval=gallery_interval)
+
+
+@app.route('/index_full')
+def index_full():
+    calendar_entries = get_calendar_entries(28)
+    calender_entries_mask = get_calendar_entries_mask(calendar_entries)
+    calendar_colors = get_calendar_colors()
+    image_paths = get_image_paths()
+    gallery_interval = 5000  # milliseconds = 1/1000 seconds
+    gallery_mode = False
+    max_image_height = 700  # pixels
+    max_entries = 11
+    return render_template('index.html',
+                           entries=calendar_entries[:max_entries],
+                           date_mask=calender_entries_mask[:max_entries],
                            colors=calendar_colors,
                            gallery=gallery_mode,
                            images=image_paths,

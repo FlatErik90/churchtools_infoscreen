@@ -9,9 +9,6 @@
         rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
         crossorigin="anonymous">
-        <!--link rel="preconnect" href="https://fonts.googleapis.com"-->
-        <!--link rel="preconnect" href="https://fonts.gstatic.com" crossorigin-->
-        <!--link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet"-->
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
         <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
@@ -30,12 +27,22 @@
         }
         </style>
         <style>
-            tr.noBorder td {
-             border: 0;
+            tr.lightBorder td {
+             border-width: 1px 0px 0px 0px;
+            }
+            tr.strongBorder td {
+             border-width: 1px 0px 0px 0px;
+             border-color: #7e807f;
             }
         </style>
         <style>
-        body { font-family: 'Roboto';}
+        body { font-family: 'Roboto';
+        }
+        {% if not gallery %}
+        h4 {font-size: 2rem;}
+        h5 {font-size: 1.75rem;}
+        h6 {font-size: 1.3rem;}
+        {% endif %}
         </style>
     </head>
     <body>
@@ -43,6 +50,7 @@
             <h1 class="display-4">Aktuelle Termine</h1>
             <h3>{{moment().format('dddd, DD.MM.YY')}}</h3>
         </div-->
+        <div class="container-fluid p-5"></div>
         <div class="container-fluid">
             <div class="row">
             {% if gallery %}
@@ -53,17 +61,16 @@
             </div>
             <div class="col-7">
             {% else %}
-             <div class="col-12">
+                <div class="col-1"></div>
+             <div class="col-10">
             {% endif %}
             <table class="table" style="border-collapse: separate; border-spacing: 0 1em;">
                 {% for entry in entries %}
-                {% if separator_mask[loop.index0] %}
-                <tr>
+                {% if date_mask[loop.index0] %}
+                <tr class="strongBorder">
                 {% else %}
-                <tr class="noBorder">
+                <tr class="lightBorder">
                 {% endif %}
-                    <!--td style="width: 2%; writing-mode: vertical-rl; text-orientation: upright" class="bg-color-{{entry.calendar.id}}"><b>{{ entry.calendar.name[:3]|upper }}</b></td-->
-                    <!--td style="width: 2%" class="bg-color-{{entry.calendar.id}}"></td-->
                     <td>
                         <h4>
                             {% if date_mask[loop.index0] %}
@@ -87,7 +94,7 @@
                         {% endif %}
                         </h4>
                     </td>
-                    <td><h4><b>{{ entry.caption }}</b></h4>
+                    <td style="width:40%;"><h4><b>{{ entry.caption }}</b></h4>
                         <h5 class="text-muted">
                         {% if entry.note is not none and entry.address.meetingAt is not none%}
                         {{ entry.note }}<br>{{ entry.address.meetingAt }}
@@ -112,6 +119,9 @@
             </table>
             </div>
             </div>
+                {% if not gallery %}
+            <div class="col-1">
+                {% endif %}
         </div>
         <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
