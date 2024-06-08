@@ -23,14 +23,18 @@ def get_calendar_entries(next_n_days):
     # enable to see all calendar ids
     # for c in ct_client.calendars.list():
     #     print(c.name, c.id, c.color)
-    entries = ct_client.calendars.appointments(public_calendar_ids,
-                                               datetime.datetime.now(),
-                                               datetime.datetime.now() + datetime.timedelta(days=next_n_days))
-    # filter out entries with duplicate names and entries with the name Gottesdienst
+    start = datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)
+    end = datetime.datetime.now() + datetime.timedelta(days=next_n_days)
+    entries = ct_client.calendars.appointments(public_calendar_ids, start, end)
+    # filter out appointments that are longer ago than half an hour and
+    # filter out entries with duplicate names and entries with the name Gottesdienst (unless note is filled)
     seen_entries = []
     filtered_entries = []
     for e in entries:
-        if (e.caption, e.startDate) not in seen_entries and e.caption != "Gottesdienst" or e.note is not None:
+        # print(e.startDate, e.startDate)
+        if (e.caption, e.startDate) not in seen_entries \
+                and e.caption != "Gottesdienst" or e.note is not None\
+                and e.startDate >= start + datetime.timedelta(minutes=30):
             filtered_entries.append(e)
             seen_entries.append((e.caption, e.startDate))
     for entry in filtered_entries:
