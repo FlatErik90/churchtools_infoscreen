@@ -34,14 +34,20 @@
              border-width: 1px 0px 0px 0px;
              border-color: #7e807f;
             }
+            td.noBorder {
+             border: 0px;
+            }
+            tr.noBorder td {
+             border: 0px;
+            }
         </style>
         <style>
         body { font-family: 'Roboto';
         }
         {% if not gallery %}
-        h4 {font-size: 2rem;}
-        h5 {font-size: 1.75rem;}
-        h6 {font-size: 1.3rem;}
+        h4 {font-size: 2.6rem;}
+        h5 {font-size: 2.1rem;}
+        h6 {font-size: 1.4rem;}
         {% endif %}
         </style>
     </head>
@@ -66,24 +72,31 @@
             {% endif %}
             <table class="table" style="border-collapse: separate; border-spacing: 0 1em;">
                 {% for entry in entries %}
-                {% if date_mask[loop.index0] %}
+                {% if loop.index0 == 0 %}
+                <tr class="noBorder">
+                {% elif date_mask[loop.index0] %}
                 <tr class="strongBorder">
                 {% else %}
                 <tr class="lightBorder">
                 {% endif %}
+                    {% if date_mask[loop.index0] %}
                     <td>
                         <h4>
-                            {% if date_mask[loop.index0] %}
                             {{ moment(entry.startDate).format('dddd') }}
-                            {% endif %}
                         </h4>
+                    {% else %}
+                    <td class="noBorder">
+                    {% endif %}
                     </td>
+
+                    {% if date_mask[loop.index0] %}
                     <td>
-                        <h4>
-                            {% if date_mask[loop.index0] %}
-                            {{ moment(entry.startDate).format('DD. MMMM') }}
-                            {% endif %}
-                        </h4>
+                    <h4>
+                        {{ moment(entry.startDate).format('DD. MMMM') }}
+                    </h4>
+                    {% else %}
+                    <td class="noBorder">
+                    {% endif %}
                     </td>
                     <td>
                         <h4>

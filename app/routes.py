@@ -109,7 +109,7 @@ def index_full():
     gallery_interval = 5000  # milliseconds = 1/1000 seconds
     gallery_mode = False
     max_image_height = 700  # pixels
-    max_entries = 11
+    max_entries = 9
     return render_template('index.html',
                            entries=calendar_entries[:max_entries],
                            date_mask=calender_entries_mask[:max_entries],
