@@ -35,10 +35,11 @@ def get_calendar_entries(next_n_days):
     seen_entries = []
     filtered_entries = []
     for e in entries:
-        # print(e.caption, e.startDate.astimezone(tz) + datetime.timedelta(minutes=30) >= now)
+         # print(e.caption, e.startDate.astimezone(tz) + datetime.timedelta(minutes=30) >= now)
          if (e.caption, e.startDate) not in seen_entries \
                 and (e.caption != "Gottesdienst" or e.note is not None) \
-                and e.startDate.astimezone(tz) + datetime.timedelta(minutes=30) >= now:
+                and (isinstance(e.startDate, datetime.date) \
+                or e.startDate.astimezone(tz) + datetime.timedelta(minutes=30) >= now):
             filtered_entries.append(e)
             seen_entries.append((e.caption, e.startDate))
     for entry in filtered_entries:
@@ -60,7 +61,10 @@ def get_calendar_entries_mask(calendar_entries):
     mask = [True]
     current_date = calendar_entries[0].startDate
     for entry in calendar_entries[1:]:
-        mask.append(entry.startDate.date() != current_date.date())
+        if isinstance(entry.startDate, datetime.date):
+            mask.append(entry.startDate != current_date)
+        else:
+            mask.append(entry.startDate.date() != current_date.date())
         current_date = entry.startDate
     return mask
 
