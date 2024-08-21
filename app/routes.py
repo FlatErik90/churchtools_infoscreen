@@ -56,16 +56,20 @@ def get_calendar_entries(next_n_days):
 
     return filtered_entries
 
+def to_date(datetime_val):
+    if isinstance(datetime_val, datetime.datetime):
+        return datetime_val.date()
+    elif isinstance(datetime_val, datetime.date):
+        return datetime_val
+    else:
+        raise TypeError(f"datetime values has wrong type: {type(datetime_val)}. Should be datetime.datetime or datetime.date")
 
 def get_calendar_entries_mask(calendar_entries):
     mask = [True]
-    current_date = calendar_entries[0].startDate
+    current_date = to_date(calendar_entries[0].startDate)
     for entry in calendar_entries[1:]:
-        if isinstance(entry.startDate, datetime.date):
-            mask.append(entry.startDate != current_date)
-        else:
-            mask.append(entry.startDate.date() != current_date.date())
-        current_date = entry.startDate
+        mask.append(to_date(entry.startDate) != current_date)
+        current_date = to_date(entry.startDate)
     return mask
 
 
