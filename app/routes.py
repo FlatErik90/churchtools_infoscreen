@@ -105,7 +105,7 @@ def get_image_paths():
 #                            max_image_height=max_image_height,
 #                            interval=gallery_interval)
 
-
+@app.route('/')
 @app.route('/index')
 def index_full():
     calendar_entries = get_calendar_entries(50)
