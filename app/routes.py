@@ -65,68 +65,56 @@ def to_date(datetime_val):
         raise TypeError(f"datetime values has wrong type: {type(datetime_val)}. Should be datetime.datetime or datetime.date")
 
 def get_calendar_entries_mask(calendar_entries):
-    mask = [True]
-    current_date = to_date(calendar_entries[0].startDate)
-    for entry in calendar_entries[1:]:
-        mask.append(to_date(entry.startDate) != current_date)
-        current_date = to_date(entry.startDate)
-    return mask
+    if len(calendar_entries) > 0:
+        mask = [True]
+        current_date = to_date(calendar_entries[0].startDate)
+        if len(calendar_entries) > 1:
+            for entry in calendar_entries[1:]:
+                mask.append(to_date(entry.startDate) != current_date)
+                current_date = to_date(entry.startDate)
+        return mask
+    else:
+        return []
 
 
 def get_calendar_colors():
-    return [(c.id, c.color) for c in ct_client.calendars.list() if c.id in public_calendar_ids]
+    return [(c.id, c.color) for c in ct_client.calendars.get_all() if c.id in public_calendar_ids]
 
 
 def get_image_paths():
     return os.listdir("app/static/gallery_images")
 
 
-@app.route('/')
+# @app.route('/')
+# @app.route('/index')
+# def index():
+#     calendar_entries = get_calendar_entries(50)
+#     calender_entries_mask = get_calendar_entries_mask(calendar_entries)
+#     calendar_colors = get_calendar_colors()
+#     image_paths = get_image_paths()
+#     gallery_interval = 5000  # milliseconds = 1/1000 seconds
+#     gallery_mode = True
+#     max_image_height = 700  # pixels
+#     max_entries = 15
+#     return render_template('index.html',
+#                            entries=calendar_entries[:max_entries],
+#                            date_mask=calender_entries_mask[:max_entries],
+#                            colors=calendar_colors,
+#                            gallery=gallery_mode,
+#                            images=image_paths,
+#                            max_image_height=max_image_height,
+#                            interval=gallery_interval)
+
+
 @app.route('/index')
-def index():
-    calendar_entries = get_calendar_entries(28)
-    calender_entries_mask = get_calendar_entries_mask(calendar_entries)
-    calendar_colors = get_calendar_colors()
-    image_paths = get_image_paths()
-    gallery_interval = 5000  # milliseconds = 1/1000 seconds
-    gallery_mode = True
-    max_image_height = 700  # pixels
-    max_entries = 15
-    # print(ct_client.wiki.categories())
-    # pages = ct_client.wiki.pages(31)
-    # for page in pages:
-    #     real_page = ct_client.wiki.page(31, page.identifier)
-    #     print(real_page.text)
-    #     print(page.text, page.wikiCategory.name)
-    # print(calendar_entries)
-    # print(calender_entries_mask)
-    # print(calendar_colors)
-    # print(image_paths)
-    return render_template('index.html',
-                           entries=calendar_entries[:max_entries],
-                           date_mask=calender_entries_mask[:max_entries],
-                           colors=calendar_colors,
-                           gallery=gallery_mode,
-                           images=image_paths,
-                           max_image_height=max_image_height,
-                           interval=gallery_interval)
-
-
-@app.route('/index_full')
 def index_full():
-    calendar_entries = get_calendar_entries(28)
+    calendar_entries = get_calendar_entries(50)
     calender_entries_mask = get_calendar_entries_mask(calendar_entries)
     calendar_colors = get_calendar_colors()
-    image_paths = get_image_paths()
-    gallery_interval = 5000  # milliseconds = 1/1000 seconds
     gallery_mode = False
-    max_image_height = 700  # pixels
-    max_entries = 8
+    max_entries = 15
     return render_template('index.html',
                            entries=calendar_entries[:max_entries],
                            date_mask=calender_entries_mask[:max_entries],
                            colors=calendar_colors,
-                           gallery=gallery_mode,
-                           images=image_paths,
-                           max_image_height=max_image_height,
-                           interval=gallery_interval)
+                           gallery=gallery_mode)
