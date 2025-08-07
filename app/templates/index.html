@@ -52,10 +52,12 @@
         </style>
     </head>
     <body>
-        <!--div class="container-fluid text-sm-center p-5 bg-light">
-            <h1 class="display-4">Aktuelle Termine</h1>
-            <h3>{{moment().format('dddd, DD.MM.YY')}}</h3>
-        </div-->
+        {% if title is not none %}
+        <div class="container-fluid text-sm-center p-5 bg-light">
+            <h1 class="display-4">{{ title }}</h1>
+            <!-- <h3>{{moment().format('dddd, DD.MM.YY')}}</h3> -->
+        </div>
+        {% endif %}
         <div class="container-fluid p-5"></div>
         <div class="container-fluid">
             <div class="row">

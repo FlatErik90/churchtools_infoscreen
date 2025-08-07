@@ -56,6 +56,34 @@ def get_calendar_entries(next_n_days):
 
     return filtered_entries
 
+def get_preview_calendar_entries(next_n_days):
+    now = datetime.datetime.now(tz=tz)
+    end = now + datetime.timedelta(days=next_n_days)
+    entries = ct_client.calendars.appointments(public_calendar_ids, now, end)
+    seen_entries = []
+    filtered_entries = []
+    for e in entries:
+         # print(e.caption, e.startDate.astimezone(tz) + datetime.timedelta(minutes=30) >= now)
+         if (e.caption, e.startDate) not in seen_entries \
+                and (e.onBehalfOfPid == 107) \
+                and (isinstance(e.startDate, datetime.date) \
+                or e.startDate.astimezone(tz) + datetime.timedelta(minutes=30) >= now):
+            filtered_entries.append(e)
+            seen_entries.append((e.caption, e.startDate))
+    for entry in filtered_entries:
+        if entry.calendar.id == 27:
+            entry.calendar.name = "Gottesdienst"
+        elif entry.calendar.id == 30:
+            entry.calendar.name = ""
+        elif entry.calendar.id == 86:
+            entry.calendar.name = "Konfirmanden"
+        elif entry.calendar.id == 83:
+            entry.calendar.name = "Reli"
+        elif entry.calendar.id == 74:
+            entry.calendar.name = "Instrumental"
+    return filtered_entries
+    
+
 def to_date(datetime_val):
     if isinstance(datetime_val, datetime.datetime):
         return datetime_val.date()
@@ -114,6 +142,23 @@ def index_full():
     gallery_mode = False
     max_entries = 15
     return render_template('index.html',
+                           title=None,
+                           entries=calendar_entries[:max_entries],
+                           date_mask=calender_entries_mask[:max_entries],
+                           colors=calendar_colors,
+                           gallery=gallery_mode)
+
+
+
+@app.route('/preview')
+def preview():
+    calendar_entries = get_preview_calendar_entries(150)
+    calender_entries_mask = get_calendar_entries_mask(calendar_entries)
+    calendar_colors = get_calendar_colors()
+    gallery_mode = False
+    max_entries = 15
+    return render_template('index.html',
+                           title="Vorschau",
                            entries=calendar_entries[:max_entries],
                            date_mask=calender_entries_mask[:max_entries],
                            colors=calendar_colors,
